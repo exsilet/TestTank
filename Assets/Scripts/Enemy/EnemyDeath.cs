@@ -34,14 +34,14 @@ namespace Enemy
       
             _animator.PlayDeath();
 
-            //StartCoroutine(DestroyTimer());
+            StartCoroutine(DestroyTimer());
       
             Happened?.Invoke();
         }
 
         private IEnumerator DestroyTimer()
         {
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(2);
             Destroy(gameObject);
         }
     }

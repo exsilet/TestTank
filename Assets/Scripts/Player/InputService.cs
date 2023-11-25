@@ -4,8 +4,8 @@ namespace Player
 {
     public abstract class InputService : IInputService
     {
-        protected const string Horizontal = "Horizontal";
-        protected const string Vertical = "Vertical";
+        protected const string Horizontal = "MoveHorizontal";
+        protected const string Vertical = "MoveVertical";
         private const string Button = "AttackTank";
 
         public abstract Vector2 Axis { get; }

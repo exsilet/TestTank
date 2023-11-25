@@ -7,8 +7,8 @@ namespace Data
     public class State
     {
         public int Difficult;
-        public int CurrentHP;
-        public int MaxHP;
+        public float CurrentHP;
+        public float MaxHP;
         [Range(0,1)]
         public float Protection;
         public void ResetHP() => CurrentHP = MaxHP;
@@ -16,8 +16,8 @@ namespace Data
         public State()
         {
             Difficult = 1;
-            CurrentHP = 10;
-            MaxHP = 10;
+            CurrentHP = 100;
+            MaxHP = 100;
             Protection = 0.2f;
         }
     }

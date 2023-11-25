@@ -34,30 +34,15 @@ namespace Player
             if (_inputService.Axis.sqrMagnitude > _epsilon)
             {
                 _currentMovement = _camera.transform.TransformDirection(_inputService.Axis);
+                _currentMovement.y = 0;
+                _currentMovement.Normalize();
 
-                //_currentMovement.y = 0;
-                //_currentMovement.Normalize();
-
-                //transform.forward = _currentMovement;
+                transform.forward = _currentMovement;
             }
-
-            HandleGravity();
+            
+            _currentMovement += Physics.gravity;
 
             _characterController.Move(_currentMovement * _speed * Time.deltaTime);
-        }
-
-        private void HandleGravity()
-        {
-            if (_characterController.isGrounded)
-            {
-                float groundedGravity = -.05f;
-                _currentMovement.y = groundedGravity;
-            }
-            else
-            {
-                float gravity = -9.8f;
-                _currentMovement.y = gravity;
-            }
         }
     }
 }

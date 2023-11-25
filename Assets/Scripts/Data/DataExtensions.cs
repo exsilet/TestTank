@@ -9,5 +9,10 @@ namespace Data
 
         public static T ToDeserialized<T>(this string json) =>
             JsonUtility.FromJson<T>(json);
+        
+        public static float SqrMagnitudeTo(this Vector3 from, Vector3 to)
+        {
+            return Vector3.SqrMagnitude(to - from);
+        }
     }
 }

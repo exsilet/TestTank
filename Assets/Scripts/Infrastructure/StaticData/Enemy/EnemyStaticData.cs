@@ -9,11 +9,13 @@ namespace Infrastructure.StaticData.Enemy
         public int Damage;
         [Range(0,1)] public float protection;
         public float Cooldown;
-        public float Speed;
+        public float MoveSpeed;
         public int Reward;
+        public float Cleavage;
+        public float EffectiveDistance;
         
         public GameObject Prefab;
-        public EnemyTypeID EnemyTypeID;
+        public MonsterTypeID monsterTypeID;
     }
 }
 

@@ -72,12 +72,12 @@ namespace Player
         {
             if (_weapons[0] == null )
             {
-                _weapons[0] = (Pistol)weapon;
+                _weapons[0] = (Rocket)weapon;
 
             }
             else if (_weapons[1] == null)
             {
-                _weapons[1] = (Rocket)weapon;
+                _weapons[1] = (MachineGun)weapon;
             }
         }
     }

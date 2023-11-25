@@ -1,11 +1,12 @@
 using System;
 using Data;
+using Infrastructure.Service.SaveLoad;
 using Logic;
 using UnityEngine;
 
 namespace Player
 {
-    public class HeroHealth : MonoBehaviour, IHealth
+    public class HeroHealth : MonoBehaviour, IHealth, ISavedProgress
     {
         private State _state;
 
@@ -41,8 +42,21 @@ namespace Player
         {
             if (Current <= 0)
                 return;
-
+            
             Current -= damage * Protection;
+        }
+        
+
+        public void LoadProgress(PlayerProgress progress)
+        {
+            _state = progress.HeroState;
+            HealthChanged?.Invoke();
+        }
+
+        public void UpdateProgress(PlayerProgress progress)
+        {
+            progress.HeroState.CurrentHP = Current;
+            progress.HeroState.MaxHP = Max;
         }
     }
 }

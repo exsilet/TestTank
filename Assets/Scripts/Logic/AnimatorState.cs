@@ -5,10 +5,7 @@
         Unknown,
         Idle,
         Attack,
-        AttackDawnUp,
         Walking,
-        Block,
-        Revive,
         Died,
     }
 }

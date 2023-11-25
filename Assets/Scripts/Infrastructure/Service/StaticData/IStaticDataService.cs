@@ -5,6 +5,6 @@ namespace Infrastructure.Service.StaticData
     public interface IStaticDataService : IService
     {
         void Load();
-        EnemyStaticData ForTower(EnemyTypeID typeID);
+        EnemyStaticData ForTower(MonsterTypeID typeID);
     }
 }

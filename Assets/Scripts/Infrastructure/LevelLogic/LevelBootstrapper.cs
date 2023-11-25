@@ -24,7 +24,6 @@ namespace Infrastructure.LevelLogic
             _levelScreen.StartLoaded += OnNewGameLoaded;
         }
 
-
         private void OnDisable()
         {
             _levelScreen.StartLoaded -= OnNewGameLoaded;

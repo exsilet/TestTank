@@ -1,3 +1,4 @@
+using Infrastructure.CameraLogic;
 using Infrastructure.Factory;
 using Infrastructure.Service.PersistentProgress;
 using Infrastructure.Service.SaveLoad;
@@ -51,14 +52,14 @@ namespace Infrastructure.LevelLogic
         {
             GameObject hud = _gameFactory.CreateHud();
             
-            InitSpawners(hud);
             GameObject hero = _gameFactory.CreateHero(GameObject.FindWithTag(InitialPointTag));
-            hero.transform.SetParent(Camera.main.transform);
-
-            InitHud();
+            //hero.transform.SetParent(Camera.main.transform);
+            
+            InitSpawners(hud, hero);
+            CameraFollow(hero);
         }
 
-        private void InitSpawners(GameObject hudBattle)
+        private void InitSpawners(GameObject hudBattle, GameObject hero)
         {
             foreach (GameObject spawnerObject in GameObject.FindGameObjectsWithTag("EnemySpawner"))
             {
@@ -68,16 +69,14 @@ namespace Infrastructure.LevelLogic
             }
         }
 
-        private void InitHud()
-        {
-            //hud.GetComponentInChildren<ActorUI>().Construct(hero.GetComponent<Hero>(),hero.GetComponent<HeroHealth>(), hero.GetComponent<CastSpell>());
-        }
-
         private void InformProgressReaders()
         {
             foreach (ISavedProgressReader progressReader in _gameFactory.ProgressReaders)
                 progressReader.LoadProgress(_progressService.Progress);
 
         }
+        
+        private void CameraFollow(GameObject hero) =>
+            Camera.main.GetComponent<CameraFollow>().Follow(hero);
     }
 }

@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Enemy;
 using Infrastructure.AssetManagement;
 using Infrastructure.Service.SaveLoad;
 using Infrastructure.Service.StaticData;
 using Infrastructure.StaticData.Enemy;
 using Logic;
+using UI;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Infrastructure.Factory
 {
@@ -13,7 +17,8 @@ namespace Infrastructure.Factory
         public List<ISavedProgressReader> ProgressReaders { get; } = new List<ISavedProgressReader>();
         public List<ISavedProgress> ProgressWriters { get; } = new List<ISavedProgress>();
 
-        private GameObject _heroGameObject;
+        public GameObject HeroGameObject { get; set; }
+        public event Action HeroCreated;
         
         private readonly IAssetProvider _assets;
         private readonly IStaticDataService _staticData;
@@ -24,19 +29,14 @@ namespace Infrastructure.Factory
             _staticData = staticData;
         }
 
-        public GameObject CreateSelectUnits()
-        {
-            var selectUnits = _assets.Instantiate(AssetPath.SelectUnitsPath);
-            return selectUnits;
-        }
-
         public GameObject CreateHero(GameObject at)
         {
-            var hero = _assets.Instantiate(path: AssetPath.HeroPath, at: at.transform.position);
+            HeroGameObject = _assets.Instantiate(path: AssetPath.HeroPath, at: at.transform.position);
+            HeroCreated?.Invoke();
 
-            RegisterProgressWatchers(hero);
+            RegisterProgressWatchers(HeroGameObject);
 
-            return hero;
+            return HeroGameObject;
         }
 
         public GameObject CreateHud()
@@ -53,16 +53,24 @@ namespace Infrastructure.Factory
             return hudMenu;
         }
 
-        public GameObject CreatEnemy(EnemyTypeID typeId, Transform parent)
+        public GameObject CreatEnemy(MonsterTypeID typeId, Transform parent)
         {
-            EnemyStaticData enemyData = _staticData.ForTower(typeId);
-            GameObject enemy = Object.Instantiate(enemyData.Prefab, parent.position, Quaternion.identity, parent);
+            EnemyStaticData monsterData = _staticData.ForTower(typeId);
+            GameObject monster = Object.Instantiate(monsterData.Prefab, parent.position, Quaternion.identity, parent);
 
-            var health = enemy.GetComponentInChildren<IHealth>();
-            health.Current = enemyData.Hp;
-            health.Max = enemyData.Hp;
-        
-            return enemy;
+            IHealth health = monster.GetComponent<IHealth>();
+            health.Current = monsterData.Hp;
+            health.Max = monsterData.Hp;
+
+            monster.GetComponent<ActorUI>().Construct(health);
+            monster.GetComponent<UnityEngine.AI.NavMeshAgent>().speed = monsterData.MoveSpeed;
+
+            var attack = monster.GetComponent<EnemyAttack>();
+            attack.Damage = monsterData.Damage;
+            attack.Cleavage = monsterData.Cleavage;
+            attack.EffectiveDistance = monsterData.EffectiveDistance;
+
+            return monster;
         }
 
         public void Cleanup()
